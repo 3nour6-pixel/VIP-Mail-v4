@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP Mail - Contact Us</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="translations.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="16" x="2" y="4" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text text-gold-premium">VIP Mail</span>
+                </a>
+
+                <div class="nav-links">
+                    <a href="/#features" data-i18n="nav_features">Features</a>
+                    <a href="/#pricing" data-i18n="nav_pricing">Pricing</a>
+                    <a href="about.html" data-i18n="nav_about">About Us</a>
+                    <div class="lang-switcher">
+                        <button class="lang-btn" id="lang-en">EN</button>
+                        <button class="lang-btn" id="lang-ar">AR</button>
+                    </div>
+                    <button class="btn-login" data-i18n="nav_login">Sign In</button>
+                    <button class="btn-primary" data-i18n="nav_book">Book Your Email</button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button class="mobile-menu-btn" aria-label="Menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" x2="20" y1="12" y2="12"/>
+                        <line x1="4" x2="20" y1="6" y2="6"/>
+                        <line x1="4" x2="20" y1="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <div class="mobile-menu-links">
+            <a href="/#features" data-i18n="nav_features">Features</a>
+            <a href="/#pricing" data-i18n="nav_pricing">Pricing</a>
+            <a href="about.html" data-i18n="nav_about">About Us</a>
+            <div class="lang-switcher" style="justify-content: center; margin: 1rem 0;">
+                <button class="lang-btn" id="lang-en-mobile">EN</button>
+                <button class="lang-btn" id="lang-ar-mobile">AR</button>
+            </div>
+            <button class="btn-login" data-i18n="nav_login">Sign In</button>
+            <button class="btn-primary" data-i18n="nav_book">Book Your Email</button>
+        </div>
+    </div>
+
+    <section class="page-content" style="padding-top: 10rem; padding-bottom: 6rem; min-height: 80vh;">
+        <div class="container" style="max-width: 600px; margin: 0 auto; background: var(--card); padding: 2.5rem; border-radius: 0.75rem; border: 1px solid var(--border); text-align: center;">
+            <h1 class="section-title" style="margin-bottom: 2rem;">
+                <span class="text-gold-premium" data-i18n="contact_title">Contact Us</span>
+            </h1>
+
+            <p style="font-size: 1.1rem; margin-bottom: 2rem; color: var(--muted-foreground);" data-i18n="contact_intro">
+                The VIP Mail team is ready to answer all your inquiries and provide the necessary support.
+            </p>
+
+            <div style="text-align: left; margin-bottom: 2.5rem;">
+                <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--gold);" data-i18n="contact_support_title">
+                    For Technical Support and Assistance
+                </h3>
+                <p style="font-size: 1.1rem;">
+                    <a href="mailto:support@vipm.org" style="color: var(--gold-light); text-decoration: underline;">support@vipm.org</a>
+                </p>
+            </div>
+
+            <div style="text-align: left;">
+                <h3 style="font-size: 1.25rem; margin-bottom: 0.75rem; color: var(--gold);" data-i18n="contact_general_title">
+                    For General Inquiries and Partnerships
+                </h3>
+                <p style="font-size: 1.1rem;">
+                    <a href="mailto:info@vipm.org" style="color: var(--gold-light); text-decoration: underline;">info@vipm.org</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="logo-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                            </svg>
+                        </div>
+                        <span class="text-gold-premium">VIP Mail</span>
+                    </div>
+                    <p data-i18n="footer_tagline">Secure and premium email for the digital elite</p>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-i18n="footer_quick_links">Quick Links</h4>
+                    <ul>
+                        <li><a href="/#features" data-i18n="footer_features">Features</a></li>
+                        <li><a href="/#pricing" data-i18n="footer_pricing">Pricing</a></li>
+                        <li><a href="about.html" data-i18n="footer_about">About Us</a></li>
+                        <li><a href="contact.html" data-i18n="footer_contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-i18n="footer_legal">Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a></li>
+                        <li><a href="terms.html" data-i18n="footer_terms">Terms of Service</a></li>
+                        <li><a href="refund.html" data-i18n="footer_refund">Refund Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-i18n="footer_follow">Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                            <rect width="4" height="12" x="2" y="9"/>
+                            <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 VIP Mail. <span data-i18n="footer_rights">All rights reserved.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

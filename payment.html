@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - VIP Mail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+    <script src="translations.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <a href="/" class="logo">
+                    <div class="logo-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect width="20" height="16" x="2" y="4" rx="2"/>
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text text-gold-premium">VIP Mail</span>
+                </a>
+
+                <div class="nav-links">
+                    <a href="/#features" data-i18n="nav_features">Features</a>
+                    <a href="/#pricing" data-i18n="nav_pricing">Pricing</a>
+                    <a href="about.html" data-i18n="nav_about">About Us</a>
+                    <div class="lang-switcher">
+                        <button class="lang-btn" id="lang-en">EN</button>
+                        <button class="lang-btn" id="lang-ar">AR</button>
+                    </div>
+                    <button class="btn-login" data-i18n="nav_login">Sign In</button>
+                    <button class="btn-primary" data-i18n="nav_book">Book Your Email</button>
+                </div>
+
+                <button class="mobile-menu-btn" aria-label="Menu" data-i18n-label="nav_menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="4" x2="20" y1="12" y2="12"/>
+                        <line x1="4" x2="20" y1="6" y2="6"/>
+                        <line x1="4" x2="20" y1="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-menu">
+        <div class="mobile-menu-links">
+            <a href="/#features" data-i18n="nav_features">Features</a>
+            <a href="/#pricing" data-i18n="nav_pricing">Pricing</a>
+            <a href="about.html" data-i18n="nav_about">About Us</a>
+            <div class="lang-switcher" style="justify-content: center; margin: 1rem 0;">
+                <button class="lang-btn" id="lang-en-mobile">EN</button>
+                <button class="lang-btn" id="lang-ar-mobile">AR</button>
+            </div>
+            <button class="btn-login" data-i18n="nav_login">Sign In</button>
+            <button class="btn-primary" data-i18n="nav_book">Book Your Email</button>
+        </div>
+    </div>
+
+    <section class="payment-section">
+        <div class="container">
+            <div class="payment-container">
+                <div class="payment-header">
+                    <h1 class="payment-title">
+                        <span class="text-gold-premium" data-i18n="payment_title">Complete Booking</span>
+                    </h1>
+                    <p class="payment-description" data-i18n="payment_description">Choose your preferred payment method</p>
+                </div>
+
+                <!-- Error Message -->
+                <div class="error-message" id="error-message" style="display: none;">
+                    <div class="error-content">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        <span id="error-message-text">حدث خطأ. يرجى المحاولة مرة أخرى.</span>
+                    </div>
+                </div>
+
+                <div class="payment-methods">
+                    <div class="method-card" id="paypal-card">
+                        <div class="method-icon">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" alt="PayPal Logo">
+                        </div>
+                        <h3 data-i18n="payment_paypal">PayPal</h3>
+                        <p data-i18n="payment_paypal_desc">Pay via PayPal</p>
+                    </div>
+
+                    <div class="method-card" id="instapay-card">
+                        <div class="method-icon">
+                            <img src="instapay-logo.png" alt="InstaPay Logo">
+                        </div>
+                        <h3 data-i18n="payment_instapay">InstaPay</h3>
+                        <p data-i18n="payment_instapay_desc">Pay via InstaPay</p>
+                    </div>
+                </div>
+
+                <div class="payment-form" id="paypal-form" style="display: none;">
+                    <div class="form-header">
+                        <h2 data-i18n="payment_paypal_title">Pay via PayPal</h2>
+                        <button class="btn-back" onclick="resetPaymentForm()" data-i18n="payment_back">Back</button>
+                    </div>
+                    
+                    <div class="payment-info">
+                        <div class="info-item">
+                            <span class="info-label" data-i18n="payment_paypal_email">PayPal Email:</span>
+                            <span class="info-value">3nour6@gmail.com</span>
+                        </div>
+                    </div>
+
+                    <div class="payment-type-selection">
+                        <label class="payment-type-option">
+                            <input type="radio" name="paypal-type" value="friends" checked>
+                            <div class="option-content">
+                                <h4 data-i18n="payment_friends">Friends & Family</h4>
+                                <p class="price">$1.00</p>
+                                <p class="price-note" data-i18n="payment_friends_note">Just one dollar</p>
+                            </div>
+                        </label>
+
+                        <label class="payment-type-option">
+                            <input type="radio" name="paypal-type" value="goods">
+                            <div class="option-content">
+                                <h4 data-i18n="payment_goods">Goods & Services</h4>
+                                <p class="price">$1.54</p>
+                                <p class="price-note" data-i18n="payment_goods_note">Includes PayPal fees</p>
+                            </div>
+                        </label>
+                    </div>
+
+                    <form class="booking-form" id="paypal-booking-form" enctype="multipart/form-data">
+                        <input type="hidden" name="payment_method" value="paypal">
+                        
+                        <div class="form-group">
+                            <label data-i18n="payment_screenshot_label">Transfer Screenshot *</label>
+                            <div class="file-upload">
+                                <input type="file" id="paypal-screenshot" name="screenshot" accept="image/*" required>
+                                <label for="paypal-screenshot" class="file-label">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="17 8 12 3 7 8"/>
+                                        <line x1="12" y1="3" x2="12" y2="15"/>
+                                    </svg>
+                                    <span data-i18n="payment_screenshot_btn">Choose Image</span>
+                                </label>
+                                <span class="file-name" id="paypal-file-name" data-i18n="payment_no_file">No file chosen</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="payment_email_label">Email *</label>
+                            <input type="email" name="email" class="form-input" placeholder="example@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="payment_phone_label">Phone Number *</label>
+                            <input type="tel" name="phone" class="form-input" placeholder="+20 XXX XXX XXXX" required>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="h-captcha" data-sitekey="21167ab8-26cc-4d12-b60c-f54c98f6efa0"></div>
+                        </div>
+
+                        <button type="submit" class="btn-submit" id="paypal-submit-btn" data-i18n="payment_submit">Submit Request</button>
+                    </form>
+                </div>
+
+                <div class="payment-form" id="instapay-form" style="display: none;">
+                    <div class="form-header">
+                        <h2 data-i18n="payment_instapay_title">Pay via InstaPay</h2>
+                        <button class="btn-back" onclick="resetPaymentForm()" data-i18n="payment_back">Back</button>
+                    </div>
+                    
+                    <div class="payment-info">
+                        <div class="info-item">
+                            <span class="info-label" data-i18n="payment_instapay_account">InstaPay Account:</span>
+                            <span class="info-value">nourehabfaroukhassan@instapay</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label" data-i18n="payment_instapay_phone">Or Phone Number:</span>
+                            <span class="info-value" dir="ltr">+201158720470</span>
+                        </div>
+                        <div class="info-note">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="16" x2="12" y2="12"/>
+                                <line x1="12" y1="8" x2="12.01" y2="8"/>
+                            </svg>
+                            <span data-i18n="payment_instapay_note">Transfer in Egyptian Pounds equivalent to $1 USD at the time of transfer</span>
+                        </div>
+                    </div>
+
+                    <form class="booking-form" id="instapay-booking-form" enctype="multipart/form-data">
+                        <input type="hidden" name="payment_method" value="instapay">
+                        
+                        <div class="form-group">
+                            <label data-i18n="payment_screenshot_label">Transfer Screenshot *</label>
+                            <div class="file-upload">
+                                <input type="file" id="instapay-screenshot" name="screenshot" accept="image/*" required>
+                                <label for="instapay-screenshot" class="file-label">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                        <polyline points="17 8 12 3 7 8"/>
+                                        <line x1="12" y1="3" x2="12" y2="15"/>
+                                    </svg>
+                                    <span data-i18n="payment_screenshot_btn">Choose Image</span>
+                                </label>
+                                <span class="file-name" id="instapay-file-name" data-i18n="payment_no_file">No file chosen</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="payment_email_label">Email *</label>
+                            <input type="email" name="email" class="form-input" placeholder="example@email.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label data-i18n="payment_phone_label">Phone Number *</label>
+                            <input type="tel" name="phone" class="form-input" placeholder="+20 XXX XXX XXXX" required>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="h-captcha" data-sitekey="21167ab8-26cc-4d12-b60c-f54c98f6efa0"></div>
+                        </div>
+
+                        <button type="submit" class="btn-submit" id="instapay-submit-btn" data-i18n="payment_submit">Submit Request</button>
+                    </form>
+                </div>
+
+                <div class="success-message" id="success-message" style="display: none;">
+                    <div class="success-icon">
+                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                    </div>
+                    <h2 data-i18n="payment_success_title">Your request has been sent successfully!</h2>
+                    <p data-i18n="payment_success_desc">We will contact you via email within 24 hours and send you a link to create your premium email</p>
+                    <a href="/" class="btn-primary" data-i18n="payment_success_btn">Back to Home</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <div class="logo-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+                            </svg>
+                        </div>
+                        <span class="text-gold-premium">VIP Mail</span>
+                    </div>
+                    <p data-i18n="footer_tagline">Secure and premium email for the digital elite</p>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-i18n="footer_quick_links">Quick Links</h4>
+                    <ul>
+                        <li><a href="/#features" data-i18n="footer_features">Features</a></li>
+                        <li><a href="/#pricing" data-i18n="footer_pricing">Pricing</a></li>
+                        <li><a href="about.html" data-i18n="footer_about">About Us</a></li>
+                        <li><a href="contact.html" data-i18n="footer_contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-i18n="footer_legal">Legal</h4>
+                    <ul>
+                        <li><a href="privacy.html" data-i18n="footer_privacy">Privacy Policy</a></li>
+                        <li><a href="terms.html" data-i18n="footer_terms">Terms of Service</a></li>
+                        <li><a href="refund.html" data-i18n="footer_refund">Refund Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4 data-i18n="footer_follow">Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                <rect width="4" height="12" x="2" y="9"/>
+                                <circle cx="4" cy="4" r="2"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 VIP Mail. <span data-i18n="footer_rights">All rights reserved.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="payment-handler.js"></script>
+</body>
+</html>
