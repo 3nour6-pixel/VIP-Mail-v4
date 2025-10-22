@@ -132,7 +132,22 @@ async function handleFormSubmit(event, formId) {
             body: formData
         });
         
-        const result = await response.json();
+        // Check if response is ok
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        
+        // Get response text first
+        const responseText = await response.text();
+        
+        // Try to parse as JSON
+        let result;
+        try {
+            result = JSON.parse(responseText);
+        } catch (e) {
+            console.error('Response is not JSON:', responseText);
+            throw new Error('Invalid response from server');
+        }
         
         if (result.success) {
             // Hide payment form
