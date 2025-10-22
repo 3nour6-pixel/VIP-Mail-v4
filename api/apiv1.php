@@ -1,134 +1,241 @@
 <?php
 /**
- * VIP Mail Configuration File
- * 
- * This file reads configuration from environment variables (Vercel)
- * or falls back to hardcoded values for local development
+ * VIP Mail Payment API v1
+ * Handles payment form submissions and sends notifications to Telegram
  */
 
-// Helper function to get environment variables
-function getEnv($key, $default = '') {
-    // Try to get from $_ENV first (Vercel)
-    if (isset($_ENV[$key]) && $_ENV[$key] !== '') {
-        return $_ENV[$key];
-    }
-    
-    // Try getenv() as fallback
-    $value = getenv($key);
-    if ($value !== false && $value !== '') {
-        return $value;
-    }
-    
-    // Return default value
-    return $default;
-}
+// Load configuration file
+require_once __DIR__ . '/config.php';
 
-// hCaptcha Configuration
-define('HCAPTCHA_SITE_KEY', getEnv('HCAPTCHA_SITE_KEY', ''));
-define('HCAPTCHA_SECRET_KEY', getEnv('HCAPTCHA_SECRET_KEY', ''));
+// Enable error reporting for debugging (disable in production)
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/error.log');
 
-// Telegram Bot Configuration
-define('TELEGRAM_BOT_TOKEN', getEnv('TELEGRAM_BOT_TOKEN', ''));
-define('TELEGRAM_CHAT_ID', getEnv('TELEGRAM_CHAT_ID', ''));
-
-// File Upload Configuration
-define('MAX_FILE_SIZE', 5 * 1024 * 1024); // 5MB
-define('ALLOWED_FILE_TYPES', ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']);
-
-// Security Configuration
-define('RATE_LIMIT_ENABLED', true);
-define('RATE_LIMIT_MAX_REQUESTS', 5);
-define('RATE_LIMIT_TIME_WINDOW', 3600);
-
-// Email Configuration
-define('ADMIN_EMAIL', getEnv('ADMIN_EMAIL', 'support@vipm.org'));
-define('FROM_EMAIL', getEnv('FROM_EMAIL', 'noreply@vipm.org'));
-
-// Environment Detection
-define('ENVIRONMENT', getEnv('VERCEL_ENV', 'development')); // Vercel auto-sets this
-define('DEBUG_MODE', ENVIRONMENT === 'development');
-
-// PayPal Configuration
-define('PAYPAL_EMAIL', getEnv('PAYPAL_EMAIL', '3nour6@gmail.com'));
-
-// InstaPay Configuration
-define('INSTAPAY_ACCOUNT', getEnv('INSTAPAY_ACCOUNT', 'nourehabfaroukhassan@instapay'));
-define('INSTAPAY_PHONE', getEnv('INSTAPAY_PHONE', '+201158720470'));
-
-// Timezone
-date_default_timezone_set('Africa/Cairo');
+// Set headers
+header('Content-Type: application/json');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+header('Access-Control-Allow-Headers: Content-Type');
 
 /**
- * Validation function
+ * Send JSON response and exit
  */
-function validateConfig() {
-    $errors = [];
+function sendResponse($success, $message, $data = null) {
+    $response = [
+        'success' => $success,
+        'message' => $message
+    ];
     
+    if ($data !== null) {
+        $response['data'] = $data;
+    }
+    
+    echo json_encode($response);
+    exit;
+}
+
+/**
+ * Validate hCaptcha response
+ */
+function verifyHCaptcha($token) {
     if (empty(HCAPTCHA_SECRET_KEY)) {
-        $errors[] = 'HCAPTCHA_SECRET_KEY is not configured';
+        error_log('hCaptcha secret key is not configured');
+        return false;
     }
     
-    if (empty(TELEGRAM_BOT_TOKEN)) {
-        $errors[] = 'TELEGRAM_BOT_TOKEN is not configured';
+    $data = [
+        'secret' => HCAPTCHA_SECRET_KEY,
+        'response' => $token
+    ];
+    
+    $options = [
+        'http' => [
+            'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
+            'method'  => 'POST',
+            'content' => http_build_query($data)
+        ]
+    ];
+    
+    $context = stream_context_create($options);
+    $result = @file_get_contents('https://hcaptcha.com/siteverify', false, $context);
+    
+    if ($result === false) {
+        error_log('Failed to verify hCaptcha: connection error');
+        return false;
     }
     
-    if (empty(TELEGRAM_CHAT_ID)) {
-        $errors[] = 'TELEGRAM_CHAT_ID is not configured';
-    }
-    
-    return $errors;
-}
-
-// Only validate and show errors in development mode
-if (DEBUG_MODE) {
-    $configErrors = validateConfig();
-    if (!empty($configErrors)) {
-        error_log("Configuration Errors: " . implode(", ", $configErrors));
-        
-        // Show errors only in dev mode
-        if (php_sapi_name() === 'cli') {
-            echo "Configuration Errors:\n";
-            foreach ($configErrors as $error) {
-                echo "- $error\n";
-            }
-        }
-    }
+    $response = json_decode($result);
+    return $response && $response->success === true;
 }
 
 /**
- * DOCUMENTATION:
- * 
- * How to setup Environment Variables in Vercel:
- * 
- * 1. Go to your Vercel project dashboard
- * 2. Click on "Settings" tab
- * 3. Select "Environment Variables" from left sidebar
- * 4. Add the following variables:
- * 
- *    HCAPTCHA_SECRET_KEY = your_secret_key
- *    TELEGRAM_BOT_TOKEN = 123456789:ABCdefGHIjklMNOpqrsTUVwxyz
- *    TELEGRAM_CHAT_ID = 123456789
- *    
- *    Optional:
- *    ADMIN_EMAIL = your@email.com
- *    PAYPAL_EMAIL = your@paypal.com
- *    INSTAPAY_ACCOUNT = username@instapay
- *    INSTAPAY_PHONE = +201234567890
- * 
- * 5. Select which environments to apply them to:
- *    - Production (required)
- *    - Preview (recommended)
- *    - Development (optional)
- * 
- * 6. Click "Save"
- * 7. Redeploy your project for changes to take effect
- * 
- * For local development:
- * - Create a .env.local file (add to .gitignore)
- * - Add the same variables there
- * - PHP will read them automatically using getenv()
+ * Validate email address
  */
+function validateEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+/**
+ * Validate phone number (basic validation)
+ */
+function validatePhone($phone) {
+    $phone = preg_replace('/[^0-9+]/', '', $phone);
+    return strlen($phone) >= 10 && strlen($phone) <= 15;
+}
+
+/**
+ * Sanitize input
+ */
+function sanitizeInput($input) {
+    return htmlspecialchars(trim($input), ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Send message to Telegram with photo directly from temp file
+ */
+function sendToTelegram($tempPhotoPath, $originalFilename, $email, $phone, $paymentMethod, $paymentType = null) {
+    if (empty(TELEGRAM_BOT_TOKEN) || empty(TELEGRAM_CHAT_ID)) {
+        error_log('Telegram credentials are not configured');
+        return false;
+    }
+    
+    $url = "https://api.telegram.org/bot" . TELEGRAM_BOT_TOKEN . "/sendPhoto";
+    
+    // Prepare caption
+    $caption = "🎉 <b>New VIP Mail Payment Request</b>\n\n";
+    $caption .= "💳 <b>Payment Method:</b> " . ucfirst($paymentMethod) . "\n";
+    
+    if ($paymentType) {
+        $caption .= "📋 <b>Payment Type:</b> " . ucfirst($paymentType) . "\n";
+    }
+    
+    $caption .= "📧 <b>Email:</b> " . $email . "\n";
+    $caption .= "📱 <b>Phone:</b> " . $phone . "\n";
+    $caption .= "⏰ <b>Time:</b> " . date('Y-m-d H:i:s') . "\n";
+    
+    // Get file extension from original filename
+    $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
+    $mimetype = mime_content_type($tempPhotoPath);
+    
+    // Create CURLFile with proper filename
+    $cfile = new CURLFile($tempPhotoPath, $mimetype, 'payment.' . $extension);
+    
+    // Prepare file upload
+    $post_fields = [
+        'chat_id' => TELEGRAM_CHAT_ID,
+        'caption' => $caption,
+        'parse_mode' => 'HTML',
+        'photo' => $cfile
+    ];
+    
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    
+    $result = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    
+    if ($httpCode !== 200) {
+        error_log('Telegram API error. HTTP Code: ' . $httpCode . ', Response: ' . $result);
+        return false;
+    }
+    
+    $response = json_decode($result, true);
+    return isset($response['ok']) && $response['ok'] === true;
+}
+
+// Main execution
+try {
+    // Check if request method is POST
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        sendResponse(false, 'Invalid request method');
+    }
+    
+    // Verify hCaptcha
+    $hcaptchaResponse = $_POST['h-captcha-response'] ?? '';
+    if (empty($hcaptchaResponse)) {
+        sendResponse(false, 'Captcha verification is required');
+    }
+    
+    if (!verifyHCaptcha($hcaptchaResponse)) {
+        sendResponse(false, 'Captcha verification failed. Please try again.');
+    }
+    
+    // Get and validate email
+    $email = $_POST['email'] ?? '';
+    if (empty($email) || !validateEmail($email)) {
+        sendResponse(false, 'Invalid email address');
+    }
+    $email = sanitizeInput($email);
+    
+    // Get and validate phone
+    $phone = $_POST['phone'] ?? '';
+    if (empty($phone) || !validatePhone($phone)) {
+        sendResponse(false, 'Invalid phone number');
+    }
+    $phone = sanitizeInput($phone);
+    
+    // Get payment method
+    $paymentMethod = $_POST['payment_method'] ?? '';
+    if (!in_array($paymentMethod, ['paypal', 'instapay'])) {
+        sendResponse(false, 'Invalid payment method');
+    }
+    
+    // Get payment type (for PayPal)
+    $paymentType = $_POST['paypal-type'] ?? null;
+    
+    // Validate file upload
+    if (!isset($_FILES['screenshot']) || $_FILES['screenshot']['error'] !== UPLOAD_ERR_OK) {
+        sendResponse(false, 'Payment screenshot is required');
+    }
+    
+    $file = $_FILES['screenshot'];
+    
+    // Check file size
+    if ($file['size'] > MAX_FILE_SIZE) {
+        sendResponse(false, 'File size exceeds maximum limit (5MB)');
+    }
+    
+    // Check file type
+    $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mimeType = finfo_file($finfo, $file['tmp_name']);
+    finfo_close($finfo);
+    
+    if (!in_array($mimeType, $allowedTypes)) {
+        sendResponse(false, 'Invalid file type. Only images are allowed.');
+    }
+    
+    // Send to Telegram directly from temp file
+    $telegramSuccess = sendToTelegram(
+        $file['tmp_name'], 
+        $file['name'], 
+        $email, 
+        $phone, 
+        $paymentMethod, 
+        $paymentType
+    );
+    
+    if (!$telegramSuccess) {
+        error_log('Failed to send notification to Telegram for email: ' . $email);
+        sendResponse(false, 'Failed to send notification. Please try again.');
+    }
+    
+    // Success response
+    sendResponse(true, 'Your payment request has been submitted successfully!', [
+        'email' => $email,
+        'phone' => $phone,
+        'payment_method' => $paymentMethod
+    ]);
+    
+} catch (Exception $e) {
+    error_log('API Error: ' . $e->getMessage());
+    sendResponse(false, 'An unexpected error occurred. Please try again later.');
+}
 ?>
-
-
-
