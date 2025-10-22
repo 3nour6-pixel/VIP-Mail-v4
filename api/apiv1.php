@@ -86,6 +86,38 @@ function validatePhone($phone) {
 }
 
 /**
+ * Validate desired email format
+ */
+function validateDesiredEmail($desiredEmail) {
+    // Check if empty
+    if (empty($desiredEmail)) {
+        return false;
+    }
+    
+    // Check length
+    if (strlen($desiredEmail) < 3 || strlen($desiredEmail) > 64) {
+        return false;
+    }
+    
+    // Check format (only lowercase letters, numbers, dots, underscores, hyphens)
+    if (!preg_match('/^[a-z0-9._-]+$/', $desiredEmail)) {
+        return false;
+    }
+    
+    // Check for consecutive dots
+    if (strpos($desiredEmail, '..') !== false) {
+        return false;
+    }
+    
+    // Check if starts or ends with dot or hyphen
+    if (preg_match('/^[.-]|[.-]$/', $desiredEmail)) {
+        return false;
+    }
+    
+    return true;
+}
+
+/**
  * Sanitize input
  */
 function sanitizeInput($input) {
@@ -93,61 +125,87 @@ function sanitizeInput($input) {
 }
 
 /**
- * Send message to Telegram with photo directly from temp file
+ * Send message to Telegram with photo
  */
-function sendToTelegram($tempPhotoPath, $originalFilename, $email, $phone, $paymentMethod, $paymentType = null) {
+function sendToTelegram($photoPath, $email, $phone, $paymentMethod, $paymentType = null) {
     if (empty(TELEGRAM_BOT_TOKEN) || empty(TELEGRAM_CHAT_ID)) {
         error_log('Telegram credentials are not configured');
         return false;
     }
     
-    $url = "https://api.telegram.org/bot" . TELEGRAM_BOT_TOKEN . "/sendPhoto";
-    
-    // Prepare caption
-    $caption = "🎉 <b>New VIP Mail Payment Request</b>\n\n";
-    $caption .= "💳 <b>Payment Method:</b> " . ucfirst($paymentMethod) . "\n";
-    
-    if ($paymentType) {
-        $caption .= "📋 <b>Payment Type:</b> " . ucfirst($paymentType) . "\n";
+    // Check if file exists
+    if (!file_exists($photoPath)) {
+        error_log('Photo file does not exist: ' . $photoPath);
+        return false;
     }
     
-    $caption .= "📧 <b>Email:</b> " . $email . "\n";
-    $caption .= "📱 <b>Phone:</b> " . $phone . "\n";
-    $caption .= "⏰ <b>Time:</b> " . date('Y-m-d H:i:s') . "\n";
+    $url = "https://api.telegram.org/bot" . TELEGRAM_BOT_TOKEN . "/sendPhoto";
     
-    // Get file extension from original filename
-    $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
-    $mimetype = mime_content_type($tempPhotoPath);
+    // Prepare caption (max 1024 characters for Telegram)
+    $caption = "🎉 *New VIP Mail Payment Request*\n\n";
+    $caption .= "💳 *Payment Method:* " . ucfirst($paymentMethod) . "\n";
     
-    // Create CURLFile with proper filename
-    $cfile = new CURLFile($tempPhotoPath, $mimetype, 'payment.' . $extension);
+    if ($paymentType) {
+        $caption .= "📋 *Payment Type:* " . ucfirst(str_replace('_', ' ', $paymentType)) . "\n";
+    }
     
-    // Prepare file upload
+    $caption .= "📧 *Email:* " . $email . "\n";
+    $caption .= "📱 *Phone:* " . $phone . "\n";
+    $caption .= "⏰ *Time:* " . date('Y-m-d H:i:s') . "\n";
+    
+    // Prepare post fields with CURLFile
     $post_fields = [
         'chat_id' => TELEGRAM_CHAT_ID,
         'caption' => $caption,
-        'parse_mode' => 'HTML',
-        'photo' => $cfile
+        'parse_mode' => 'Markdown',
+        'photo' => new CURLFile(realpath($photoPath))
     ];
     
+    // Initialize cURL
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, 1);
+    curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
     
+    // Execute request
     $result = curl_exec($ch);
+    
+    // Check for cURL errors
+    if ($result === false) {
+        $error = curl_error($ch);
+        error_log('cURL Error: ' . $error);
+        curl_close($ch);
+        return false;
+    }
+    
+    // Get HTTP status code
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     
+    // Log response for debugging
+    error_log('Telegram API Response: ' . $result);
+    
+    // Check HTTP status code
     if ($httpCode !== 200) {
         error_log('Telegram API error. HTTP Code: ' . $httpCode . ', Response: ' . $result);
         return false;
     }
     
+    // Parse response
     $response = json_decode($result, true);
-    return isset($response['ok']) && $response['ok'] === true;
+    
+    // Check if response is valid
+    if (isset($response['ok']) && $response['ok'] === true) {
+        return true;
+    } else {
+        $errorMsg = isset($response['description']) ? $response['description'] : 'Unknown error';
+        error_log('Telegram API returned error: ' . $errorMsg);
+        return false;
+    }
 }
 
 // Main execution
@@ -155,6 +213,11 @@ try {
     // Check if request method is POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         sendResponse(false, 'Invalid request method');
+    }
+    
+    // Create uploads directory if it doesn't exist
+    if (!is_dir(UPLOAD_DIR)) {
+        mkdir(UPLOAD_DIR, 0755, true);
     }
     
     // Verify hCaptcha
@@ -212,20 +275,28 @@ try {
         sendResponse(false, 'Invalid file type. Only images are allowed.');
     }
     
-    // Send to Telegram directly from temp file
-    $telegramSuccess = sendToTelegram(
-        $file['tmp_name'], 
-        $file['name'], 
-        $email, 
-        $phone, 
-        $paymentMethod, 
-        $paymentType
-    );
+    // Generate unique filename
+    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
+    $filename = uniqid('payment_', true) . '.' . $extension;
+    $filepath = UPLOAD_DIR . $filename;
+    
+    // Move uploaded file
+    if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+        sendResponse(false, 'Failed to upload file. Please try again.');
+    }
+    
+    // Send to Telegram
+    $telegramSuccess = sendToTelegram($filepath, $email, $phone, $paymentMethod, $paymentType);
     
     if (!$telegramSuccess) {
+        // If Telegram fails, still keep the file but log the error
         error_log('Failed to send notification to Telegram for email: ' . $email);
-        sendResponse(false, 'Failed to send notification. Please try again.');
+        // Don't delete the file, admin can check uploads folder
+        sendResponse(false, 'Request received but notification failed. We will process your request manually.');
     }
+    
+    // Optional: Delete file after successful Telegram send (uncomment if you want to auto-delete)
+    // @unlink($filepath);
     
     // Success response
     sendResponse(true, 'Your payment request has been submitted successfully!', [
