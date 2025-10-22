@@ -127,54 +127,72 @@ function sanitizeInput($input) {
 /**
  * Send message to Telegram with photo
  */
-function sendToTelegram($photoPath, $email, $phone, $paymentMethod, $paymentType = null) {
+function sendToTelegram($tempPhotoPath, $originalFilename, $email, $desiredEmail, $phone, $paymentMethod, $paymentType = null) {
+    // التحقق من وجود الإعدادات (من V2)
     if (empty(TELEGRAM_BOT_TOKEN) || empty(TELEGRAM_CHAT_ID)) {
         error_log('Telegram credentials are not configured');
         return false;
     }
     
-    // Check if file exists
-    if (!file_exists($photoPath)) {
-        error_log('Photo file does not exist: ' . $photoPath);
+    // التحقق من وجود الملف المؤقت (من V2، مع تعديل المتغير)
+    if (!file_exists($tempPhotoPath)) {
+        error_log('Temporary photo file does not exist: ' . $tempPhotoPath);
         return false;
     }
     
     $url = "https://api.telegram.org/bot" . TELEGRAM_BOT_TOKEN . "/sendPhoto";
     
-    // Prepare caption (max 1024 characters for Telegram)
+    // تجهيز الـ Caption (باستخدام تنسيق Markdown من V2)
     $caption = "🎉 *New VIP Mail Payment Request*\n\n";
     $caption .= "💳 *Payment Method:* " . ucfirst($paymentMethod) . "\n";
     
     if ($paymentType) {
+        // استخدام str_replace (من V2)
         $caption .= "📋 *Payment Type:* " . ucfirst(str_replace('_', ' ', $paymentType)) . "\n";
     }
     
-    $caption .= "📧 *Email:* " . $email . "\n";
+    // --- بداية التعديل المطلوب ---
+    $caption .= "📧 *Email (Contact):* " . $email . "\n";
+    $caption .= "✉️ *Desired Email:* " . $desiredEmail . "\n"; // <-- السطر الجديد
+    // --- نهاية التعديل المطلوب ---
+    
     $caption .= "📱 *Phone:* " . $phone . "\n";
     $caption .= "⏰ *Time:* " . date('Y-m-d H:i:s') . "\n";
+
+    // --- بداية دمج منطق الملفات من (V1) ---
     
-    // Prepare post fields with CURLFile
+    // جلب الامتداد ونوع الملف كما في النسخة القديمة
+    $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
+    $mimetype = mime_content_type($tempPhotoPath);
+    
+    // إنشاء CURLFile باستخدام الطريقة القديمة (3 متغيرات)
+    // مع استخدام realpath() (من V2) لضمان المسار الصحيح
+    $cfile = new CURLFile(realpath($tempPhotoPath), $mimetype, 'payment.' . $extension);
+    
+    // --- نهاية دمج منطق الملفات ---
+
+    // تجهيز البيانات للإرسال (من V2)
     $post_fields = [
         'chat_id' => TELEGRAM_CHAT_ID,
-        'caption' => $caption,
+        'caption' => $caption, // استخدام $caption المحدث
         'parse_mode' => 'Markdown',
-        'photo' => new CURLFile(realpath($photoPath))
+        'photo' => $cfile 
     ];
     
-    // Initialize cURL
+    // إعدادات cURL (من V2 - أكثر استقراراً)
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $post_fields);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); 
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10); 
     
-    // Execute request
+    // التنفيذ (من V2)
     $result = curl_exec($ch);
     
-    // Check for cURL errors
+    // التحقق من أخطاء cURL (من V2)
     if ($result === false) {
         $error = curl_error($ch);
         error_log('cURL Error: ' . $error);
@@ -182,23 +200,23 @@ function sendToTelegram($photoPath, $email, $phone, $paymentMethod, $paymentType
         return false;
     }
     
-    // Get HTTP status code
+    // جلب كود الـ HTTP (من V2)
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     
-    // Log response for debugging
+    // تسجيل الرد دائماً (من V2)
     error_log('Telegram API Response: ' . $result);
     
-    // Check HTTP status code
+    // التحقق من كود الـ HTTP (من V2)
     if ($httpCode !== 200) {
         error_log('Telegram API error. HTTP Code: ' . $httpCode . ', Response: ' . $result);
         return false;
     }
     
-    // Parse response
+    // تحليل الرد (من V2)
     $response = json_decode($result, true);
     
-    // Check if response is valid
+    // التحقق من الرد بشكل أفضل (من V2)
     if (isset($response['ok']) && $response['ok'] === true) {
         return true;
     } else {
@@ -207,7 +225,6 @@ function sendToTelegram($photoPath, $email, $phone, $paymentMethod, $paymentType
         return false;
     }
 }
-
 // Main execution
 try {
     // Check if request method is POST
@@ -215,10 +232,7 @@ try {
         sendResponse(false, 'Invalid request method');
     }
     
-    // Create uploads directory if it doesn't exist
-    if (!is_dir(UPLOAD_DIR)) {
-        mkdir(UPLOAD_DIR, 0755, true);
-    }
+    
     
     // Verify hCaptcha
     $hcaptchaResponse = $_POST['h-captcha-response'] ?? '';
@@ -249,6 +263,11 @@ try {
     if (!in_array($paymentMethod, ['paypal', 'instapay'])) {
         sendResponse(false, 'Invalid payment method');
     }
+
+    $desired_email = $_POST['desired_email'] ?? '';
+    if (!validateDesiredEmail($desired_email)) {
+        sendResponse(false, 'Invalid desired email');
+    }
     
     // Get payment type (for PayPal)
     $paymentType = $_POST['paypal-type'] ?? null;
@@ -275,18 +294,10 @@ try {
         sendResponse(false, 'Invalid file type. Only images are allowed.');
     }
     
-    // Generate unique filename
-    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-    $filename = uniqid('payment_', true) . '.' . $extension;
-    $filepath = UPLOAD_DIR . $filename;
     
-    // Move uploaded file
-    if (!move_uploaded_file($file['tmp_name'], $filepath)) {
-        sendResponse(false, 'Failed to upload file. Please try again.');
-    }
     
     // Send to Telegram
-    $telegramSuccess = sendToTelegram($filepath, $email, $phone, $paymentMethod, $paymentType);
+    $telegramSuccess = sendToTelegram($file['tmp_name'], $file['name'], $email, $desired_email, $phone, $paymentMethod, $paymentType);
     
     if (!$telegramSuccess) {
         // If Telegram fails, still keep the file but log the error
@@ -310,3 +321,4 @@ try {
     sendResponse(false, 'An unexpected error occurred. Please try again later.');
 }
 ?>
+
