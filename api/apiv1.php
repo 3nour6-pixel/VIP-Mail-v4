@@ -93,9 +93,9 @@ function sanitizeInput($input) {
 }
 
 /**
- * Send message to Telegram with photo
+ * Send message to Telegram with photo directly from temp file
  */
-function sendToTelegram($photoPath, $email, $phone, $paymentMethod, $paymentType = null) {
+function sendToTelegram($tempPhotoPath, $originalFilename, $email, $phone, $paymentMethod, $paymentType = null) {
     if (empty(TELEGRAM_BOT_TOKEN) || empty(TELEGRAM_CHAT_ID)) {
         error_log('Telegram credentials are not configured');
         return false;
@@ -115,12 +115,19 @@ function sendToTelegram($photoPath, $email, $phone, $paymentMethod, $paymentType
     $caption .= "📱 <b>Phone:</b> " . $phone . "\n";
     $caption .= "⏰ <b>Time:</b> " . date('Y-m-d H:i:s') . "\n";
     
+    // Get file extension from original filename
+    $extension = pathinfo($originalFilename, PATHINFO_EXTENSION);
+    $mimetype = mime_content_type($tempPhotoPath);
+    
+    // Create CURLFile with proper filename
+    $cfile = new CURLFile($tempPhotoPath, $mimetype, 'payment.' . $extension);
+    
     // Prepare file upload
     $post_fields = [
         'chat_id' => TELEGRAM_CHAT_ID,
         'caption' => $caption,
         'parse_mode' => 'HTML',
-        'photo' => new CURLFile($photoPath)
+        'photo' => $cfile
     ];
     
     $ch = curl_init();
@@ -148,11 +155,6 @@ try {
     // Check if request method is POST
     if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
         sendResponse(false, 'Invalid request method');
-    }
-    
-    // Create uploads directory if it doesn't exist
-    if (!is_dir(UPLOAD_DIR)) {
-        mkdir(UPLOAD_DIR, 0755, true);
     }
     
     // Verify hCaptcha
@@ -210,28 +212,20 @@ try {
         sendResponse(false, 'Invalid file type. Only images are allowed.');
     }
     
-    // Generate unique filename
-    $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-    $filename = uniqid('payment_', true) . '.' . $extension;
-    $filepath = UPLOAD_DIR . $filename;
-    
-    // Move uploaded file
-    if (!move_uploaded_file($file['tmp_name'], $filepath)) {
-        sendResponse(false, 'Failed to upload file. Please try again.');
-    }
-    
-    // Send to Telegram
-    $telegramSuccess = sendToTelegram($filepath, $email, $phone, $paymentMethod, $paymentType);
+    // Send to Telegram directly from temp file
+    $telegramSuccess = sendToTelegram(
+        $file['tmp_name'], 
+        $file['name'], 
+        $email, 
+        $phone, 
+        $paymentMethod, 
+        $paymentType
+    );
     
     if (!$telegramSuccess) {
-        // If Telegram fails, still keep the file but log the error
         error_log('Failed to send notification to Telegram for email: ' . $email);
-        // Don't delete the file, admin can check uploads folder
-        sendResponse(false, 'Request received but notification failed. We will process your request manually.');
+        sendResponse(false, 'Failed to send notification. Please try again.');
     }
-    
-    // Optional: Delete file after successful Telegram send (uncomment if you want to auto-delete)
-    // @unlink($filepath);
     
     // Success response
     sendResponse(true, 'Your payment request has been submitted successfully!', [
