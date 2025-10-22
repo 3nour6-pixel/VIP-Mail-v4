@@ -197,4 +197,12 @@ document.addEventListener('DOMContentLoaded', function() {
             handleFormSubmit(e, 'instapay-form');
         });
     }
+    
+    // Auto-lowercase desired email inputs
+    const desiredEmailInputs = document.querySelectorAll('input[name="desired_email"]');
+    desiredEmailInputs.forEach(input => {
+        input.addEventListener('input', function(e) {
+            e.target.value = e.target.value.toLowerCase();
+        });
+    });
 });
