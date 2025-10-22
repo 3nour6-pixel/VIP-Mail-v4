@@ -23,6 +23,7 @@ function hideError() {
 // Validate form data
 function validateForm(formData) {
     const email = formData.get('email');
+    const desiredEmail = formData.get('desired_email');
     const phone = formData.get('phone');
     const screenshot = formData.get('screenshot');
     
@@ -30,6 +31,37 @@ function validateForm(formData) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!email || !emailRegex.test(email)) {
         showError(currentLang === 'ar' ? 'البريد الإلكتروني غير صالح' : 'Invalid email address');
+        return false;
+    }
+    
+    // Desired email validation
+    const desiredEmailRegex = /^[a-z0-9._-]+$/;
+    if (!desiredEmail || !desiredEmailRegex.test(desiredEmail)) {
+        showError(currentLang === 'ar' ? 'عنوان البريد المطلوب غير صالح. استخدم حروف صغيرة وأرقام ونقاط وشرطات فقط' : 'Invalid desired email. Use only lowercase letters, numbers, dots, underscores and hyphens');
+        return false;
+    }
+    
+    // Check minimum length
+    if (desiredEmail.length < 3) {
+        showError(currentLang === 'ar' ? 'عنوان البريد يجب أن يكون 3 أحرف على الأقل' : 'Email address must be at least 3 characters');
+        return false;
+    }
+    
+    // Check maximum length
+    if (desiredEmail.length > 64) {
+        showError(currentLang === 'ar' ? 'عنوان البريد طويل جداً (الحد الأقصى 64 حرف)' : 'Email address too long (max 64 characters)');
+        return false;
+    }
+    
+    // Check for consecutive dots
+    if (desiredEmail.includes('..')) {
+        showError(currentLang === 'ar' ? 'لا يمكن استخدام نقطتين متتاليتين' : 'Consecutive dots are not allowed');
+        return false;
+    }
+    
+    // Check start/end with dot or hyphen
+    if (/^[.-]|[.-]$/.test(desiredEmail)) {
+        showError(currentLang === 'ar' ? 'لا يمكن أن يبدأ أو ينتهي البريد بنقطة أو شرطة' : 'Email cannot start or end with dot or hyphen');
         return false;
     }
     
