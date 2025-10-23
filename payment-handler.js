@@ -35,7 +35,7 @@ function validateForm(formData) {
     }
     
     // Desired email validation
-    const desiredEmailRegex = /^[a-z0-9._-]+$/;
+    const desiredEmailRegex = /^[a-z0-9._\-]+$/;
     if (!desiredEmail || !desiredEmailRegex.test(desiredEmail)) {
         showError(currentLang === 'ar' ? 'عنوان البريد المطلوب غير صالح. استخدم حروف صغيرة وأرقام ونقاط وشرطات فقط' : 'Invalid desired email. Use only lowercase letters, numbers, dots, underscores and hyphens');
         return false;
@@ -221,3 +221,4 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
