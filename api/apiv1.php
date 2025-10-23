@@ -153,7 +153,7 @@ function sendToTelegram($tempPhotoPath, $originalFilename, $email, $desiredEmail
     
     // --- بداية التعديل المطلوب ---
     $caption .= "📧 *Email (Contact):* " . $email . "\n";
-    $caption .= "✉️ *Desired Email:* " . $desiredEmail . "\n"; // <-- السطر الجديد
+    $caption .= "✉️ *Desired Email:* " . $desiredEmail . "@vipm.org" . "\n"; // <-- السطر الجديد
     // --- نهاية التعديل المطلوب ---
     
     $caption .= "📱 *Phone:* " . $phone . "\n";
@@ -321,4 +321,5 @@ try {
     sendResponse(false, 'An unexpected error occurred. Please try again later.');
 }
 ?>
+
 
