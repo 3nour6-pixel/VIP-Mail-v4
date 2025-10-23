@@ -1812,6 +1812,8 @@ html {
     border-radius: 0.5rem;
     overflow: hidden;
     transition: all 0.3s;
+    direction: ltr;
+    text-align: left;
 }
 
 .email-input-wrapper:focus-within {
@@ -1838,8 +1840,6 @@ html {
     font-weight: 600;
     white-space: nowrap;
     user-select: none;
-    direction: ltr;
-    text-align: left;
 }
 
 .input-hint {
