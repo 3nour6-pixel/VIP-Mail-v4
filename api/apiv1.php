@@ -250,6 +250,11 @@ try {
         sendResponse(false, 'Invalid email address');
     }
     $email = sanitizeInput($email);
+
+    $desired_email = $_POST['desired_email'] ?? '';
+    if (!validateDesiredEmail($desired_email)) {
+        sendResponse(false, 'Invalid desired email');
+    }
     
     // Get and validate phone
     $phone = $_POST['phone'] ?? '';
@@ -264,10 +269,7 @@ try {
         sendResponse(false, 'Invalid payment method');
     }
 
-    $desired_email = $_POST['desired_email'] ?? '';
-    if (!validateDesiredEmail($desired_email)) {
-        sendResponse(false, 'Invalid desired email');
-    }
+    
     
     // Get payment type (for PayPal)
     $paymentType = $_POST['paypal-type'] ?? null;
@@ -321,5 +323,6 @@ try {
     sendResponse(false, 'An unexpected error occurred. Please try again later.');
 }
 ?>
+
 
 
