@@ -1838,6 +1838,8 @@ html {
     font-weight: 600;
     white-space: nowrap;
     user-select: none;
+    direction: ltr;
+    text-align: left;
 }
 
 .input-hint {
