@@ -159,7 +159,7 @@ const instapayCard = document.getElementById('instapay-card');
 const paypalForm = document.getElementById('paypal-form');
 const instapayForm = document.getElementById('instapay-form');
 const paymentMethods = document.querySelector('.payment-methods');
-const successMessage = document.getElementById('success-message');
+
 
 if (paypalCard) {
     paypalCard.addEventListener('click', () => {
@@ -186,7 +186,12 @@ if (paypalScreenshot) {
         if (e.target.files.length > 0) {
             paypalFileName.textContent = e.target.files[0].name;
         } else {
-            paypalFileName.textContent = 'لم يتم اختيار ملف';
+            if (currentLang == 'ar') {
+                paypalFileName.textContent = 'لم يتم اختيار ملف';
+            }
+            if (currentLang == 'en') {
+                paypalFileName.textContent = 'No file chosen';
+            } 
         }
     });
 }
@@ -200,7 +205,12 @@ if (instapayScreenshot) {
         if (e.target.files.length > 0) {
             instapayFileName.textContent = e.target.files[0].name;
         } else {
-            instapayFileName.textContent = 'لم يتم اختيار ملف';
+            if (currentLang == 'ar') {
+                instapayFileName.textContent = 'لم يتم اختيار ملف';
+            }
+            if (currentLang == 'en') {
+                instapayFileName.textContent = 'No file chosen';
+            }
         }
     });
 }
@@ -216,18 +226,9 @@ if (paypalBookingForm) {
         const amount = paymentType === 'friends' ? '$1.00' : '$1.54';
         
         // Hide form and show success message
-        paypalForm.style.display = 'none';
-        successMessage.style.display = 'block';
         
-        // Scroll to success message
-        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
-        console.log('PayPal payment submitted:', {
-            type: paymentType,
-            amount: amount,
-            email: e.target.querySelector('input[type="email"]').value,
-            phone: e.target.querySelector('input[type="tel"]').value
-        });
+        
     });
 }
 
@@ -238,16 +239,9 @@ if (instapayBookingForm) {
         e.preventDefault();
         
         // Hide form and show success message
-        instapayForm.style.display = 'none';
-        successMessage.style.display = 'block';
         
-        // Scroll to success message
-        successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
         
-        console.log('InstaPay payment submitted:', {
-            email: e.target.querySelector('input[type="email"]').value,
-            phone: e.target.querySelector('input[type="tel"]').value
-        });
+        
     });
 }
 
