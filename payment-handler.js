@@ -28,7 +28,7 @@ function validateForm(formData) {
     const screenshot = formData.get('screenshot');
     
     // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!email || !emailRegex.test(email)) {
         showError(currentLang === 'ar' ? 'البريد الإلكتروني غير صالح' : 'Invalid email address');
         return false;
@@ -221,4 +221,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
 
