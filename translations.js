@@ -107,7 +107,7 @@ const translations = {
         refund_exception_title: "The Only Refund Exception",
         refund_exception_desc: "A refund request can be considered only if the service completely fails to work due to technical reasons attributable to VIP Mail within the first 72 hours of activation and we are unable to fix it.",
         refund_cases_title: "Non-Refundable Cases",
-        refund_cases_desc: "No refund will be issued in the following cases: change of mind, account termination due to violation of terms of service, or issues related to third parties (such as client programs).",
+        refund_cases_desc: "No refund will be issued in the following cases: change of mind, or account termination due to violation of terms of service.",
 
         // Payment Page
         payment_title: "Complete Booking",
@@ -254,11 +254,11 @@ const translations = {
         // Refund Page
         refund_title: "سياسة الاسترجاع",
         refund_nonrefundable_title: "رسوم التفعيل غير قابلة للاسترداد",
-        refund_nonrefundable_desc: "تعد خدمة VIP Mail خدمة رقمية، وتعتمد قيمتها على التفعيل والحجز الحصري لعنوان البريد الإلكتروني الخاص بك. رسوم تفعيل الخدمة هي رسوم غير قابلة للاسترداد (Non-Refundable).*",
+        refund_nonrefundable_desc: "تعد خدمة VIP Mail خدمة رقمية، وتعتمد قيمتها على التفعيل والحجز الحصري لعنوان البريد الإلكتروني الخاص بك. رسوم تفعيل الخدمة هي رسوم غير قابلة للاسترداد (Non-Refundable).",
         refund_exception_title: "الاستثناء الوحيد للاسترجاع",
-        refund_exception_desc: "يمكن النظر في طلب استرداد المبلغ المدفوع **فقط** في حال **فشل الخدمة بشكل كامل** في العمل لأسباب تقنية تعود لـ VIP Mail خلال الـ **72 ساعة الأولى** من التفعيل ولم نتمكن من إصلاحها.",
+        refund_exception_desc: "يمكن النظر في طلب استرداد المبلغ المدفوع فقط في حال فشل الخدمة بشكل كامل في العمل لأسباب تقنية تعود لـ VIP Mail خلال الـ 72 ساعة الأولى من التفعيل ولم نتمكن من إصلاحها.",
         refund_cases_title: "حالات عدم الاسترجاع",
-        refund_cases_desc: "لا يتم استرداد أي مبلغ في الحالات التالية: تغيير رأي المستخدم، أو إنهاء الحساب بسبب انتهاك شروط الاستخدام، أو المشكلات المتعلقة بالطرف الثالث (مثل برامج العملاء).",
+        refund_cases_desc: "لن يتم إصدار أي استرداد في الحالات التالية: تغيير الرأي، أو إيقاف الحساب نتيجة مخالفة شروط الخدمة.",
 
         // Payment Page
         payment_title: "إتمام الحجز",
