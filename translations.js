@@ -30,6 +30,8 @@ const translations = {
         feature4_desc: "Our support team is always ready to answer any inquiry and help you anytime.",
         feature5_title: "Professional Email Management",
         feature5_desc: "Advanced tools for organizing and managing your emails with smart filters and automatic classification.",
+        feature6_title: "Global Access",
+        feature6_desc: "Access your email from anywhere in the world on any device with complete security and protection.",
 
         // Pricing Section
         pricing_title: "Choose Your Perfect Plan",
@@ -180,6 +182,8 @@ const translations = {
         feature4_desc: "فريق الدعم لدينا مستعد دائمًا للرد على أي استفسار ومساعدتك في أي وقت.",
         feature5_title: "إدارة احترافية للبريد",
         feature5_desc: "أدوات متقدمة لتنظيم وإدارة رسائلك مع فلاتر ذكية وتصنيف تلقائي.",
+        feature6_title: "وصول عالمي",
+        feature6_desc: "الوصول إلى بريدك الإلكتروني من أي مكان في العالم على أي جهاز مع أمان وحماية كاملة.",
 
         // Pricing Section
         pricing_title: "اختر باقتك المثالية",
