@@ -223,7 +223,7 @@ if (paypalBookingForm) {
         
         // Get selected payment type
         const paymentType = document.querySelector('input[name="paypal-type"]:checked').value;
-        const amount = paymentType === 'friends' ? '$1.00' : '$1.54';
+        const amount = paymentType === 'friends' ? '$1.00' : '$1.57';
         
         // Hide form and show success message
         
