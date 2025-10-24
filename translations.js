@@ -22,12 +22,14 @@ const translations = {
         features_description: "A complete email service specially designed for the digital elite",
         feature1_title: "Advanced Protection",
         feature1_desc: "Military-grade encryption to protect your messages from any hacking or spying.",
-        feature2_title: "Absolute Privacy",
-        feature2_desc: "Your data is yours alone. We don't share your information with any third party.",
+        feature2_title: "Generous Storage",
+        feature2_desc: "10 GB of storage space for each user to keep all your important messages and attachments.",
         feature3_title: "Exclusive VIP Address",
         feature3_desc: "Get a premium email ending with @vipm.org that reflects your distinction.",
-        feature4_title: "Global Access",
-        feature4_desc: "Use your email from anywhere in the world with complete protection.",
+        feature4_title: "24/7 Technical Support",
+        feature4_desc: "Our support team is always ready to answer any inquiry and help you anytime.",
+        feature5_title: "Professional Email Management",
+        feature5_desc: "Advanced tools for organizing and managing your emails with smart filters and automatic classification.",
 
         // Pricing Section
         pricing_title: "Choose Your Perfect Plan",
@@ -65,9 +67,9 @@ const translations = {
         about_title: "About Us",
         about_intro: "We are VIP Mail, an email service specially designed for the digital elite who put security and privacy above all else. Our vision is to be the secure digital haven for your professional and personal identity in a fast-paced world.",
         about_values_title: "Our Core Values",
-        about_value1: "Absolute Privacy: We don't sell your data, track your messages, or share your information with any third party. Your data is yours alone.",
-        about_value2: "Military-Grade Security: We use the highest levels of encryption to protect all your correspondence from any hacking or spying.",
-        about_value3: "Uniqueness and Distinction: Your premium email address (@vipm.org) is a reflection of your sophisticated digital identity.",
+        about_value1: "Advanced Security: We use the highest levels of encryption and Google Workspace's secure infrastructure to protect all your correspondence from any hacking or spying.",
+        about_value2: "Uniqueness and Distinction: Your premium email address (@vipm.org) is a reflection of your sophisticated digital identity.",
+        about_value3: "Reliable Infrastructure: We use Google Workspace, one of the world's most reliable and secure email platforms, to ensure service continuity and data protection.",
 
         // Contact Page
         contact_title: "Contact Us",
@@ -77,14 +79,14 @@ const translations = {
 
         // Privacy Page
         privacy_title: "Privacy Policy",
-        privacy_tagline: "Absolute privacy is our core principle.",
-        privacy_intro: "VIP Mail does not read, store, share, or sell the content of your messages or usage data for any purpose whatsoever. Our commitment to protecting your data is non-negotiable.",
-        privacy_encryption_title: "Data Protection and Encryption",
-        privacy_encryption_desc: "All your messages and attachments are encrypted using military-grade encryption, ensuring that no party, including us, can access their content.",
+        privacy_tagline: "Your security and data protection are our top priorities.",
+        privacy_intro: "VIP Mail is committed to protecting your data with the highest security standards. We use Google Workspace infrastructure to provide you with a reliable and secure email service, while ensuring the protection of your information through advanced encryption.",
+        privacy_encryption_title: "Advanced Encryption and Security",
+        privacy_encryption_desc: "All your messages and attachments are protected using military-grade encryption (TLS/SSL) during transmission and storage. We use Google Workspace's advanced security infrastructure, which includes multi-layer protection, threat detection, and continuous monitoring to ensure the safety of your data.",
         privacy_data_title: "Data We Collect",
         privacy_data_desc: "We only collect data necessary to operate your account and provide the service: the email address you chose, payment information (processed by a trusted third party and we don't store card numbers), and basic login logs for security purposes only.",
-        privacy_sharing_title: "No Data Sharing",
-        privacy_sharing_desc: "We will not share your data or message content with any third party under any circumstances, unless required by an explicit and legally binding court order, in which case we will notify the user before complying as much as possible.",
+        privacy_sharing_title: "Service Infrastructure and Data Protection",
+        privacy_sharing_desc: "VIP Mail uses Google Workspace as the email service infrastructure. Google Workspace complies with the highest international security standards and data protection regulations (including GDPR). Your data is stored securely on Google's servers with strict access controls. We do not access or read the content of your messages, and we are committed to protecting your privacy according to Google Workspace's privacy policies.",
 
         // Terms Page
         terms_title: "Terms of Service",
@@ -170,12 +172,14 @@ const translations = {
         features_description: "خدمة بريد إلكتروني متكاملة مصممة خصيصًا للنخبة الرقمية",
         feature1_title: "حماية متقدمة",
         feature1_desc: "تشفير من الطراز العسكري لحماية رسائلك من أي اختراق أو تجسس.",
-        feature2_title: "خصوصية مطلقة",
-        feature2_desc: "بياناتك ملكك وحدك. لا نشارك معلوماتك مع أي طرف ثالث.",
+        feature2_title: "مساحة تخزين ضخمة",
+        feature2_desc: "10 جيجابايت مساحة تخزين لكل مستخدم للاحتفاظ بجميع رسائلك ومرفقاتك المهمة.",
         feature3_title: "عنوان VIP حصري",
         feature3_desc: "احصل على بريد إلكتروني مميز ينتهي بـ @vipm.org يعكس تميزك.",
-        feature4_title: "وصول عالمي",
-        feature4_desc: "استخدم بريدك من أي مكان في العالم مع حماية كاملة.",
+        feature4_title: "دعم فني متواصل",
+        feature4_desc: "فريق الدعم لدينا مستعد دائمًا للرد على أي استفسار ومساعدتك في أي وقت.",
+        feature5_title: "إدارة احترافية للبريد",
+        feature5_desc: "أدوات متقدمة لتنظيم وإدارة رسائلك مع فلاتر ذكية وتصنيف تلقائي.",
 
         // Pricing Section
         pricing_title: "اختر باقتك المثالية",
@@ -213,9 +217,9 @@ const translations = {
         about_title: "من نحن",
         about_intro: "نحن VIP Mail، خدمة البريد الإلكتروني المصممة خصيصًا للنخبة الرقمية التي تضع الأمان والخصوصية فوق كل اعتبار. رؤيتنا هي أن نكون الملاذ الرقمي الآمن لهويتك المهنية والشخصية في عالم متسارع.",
         about_values_title: "قيمنا الأساسية",
-        about_value1: "الخصوصية المطلقة: نحن لا نبيع بياناتك، ولا نتتبع رسائلك، ولا نشارك معلوماتك مع أي طرف ثالث. بياناتك ملكك وحدك.",
-        about_value2: "الأمان العسكري: نستخدم أعلى مستويات التشفير لحماية جميع مراسلاتك من أي اختراق أو تجسس.",
-        about_value3: "التفرد والتميز: عنوان بريدك الإلكتروني المميز (@vipm.org) هو انعكاس لهويتك الرقمية الراقية.",
+        about_value1: "الأمان المتقدم: نستخدم أعلى مستويات التشفير والبنية التحتية الآمنة لـ Google Workspace لحماية جميع مراسلاتك من أي اختراق أو تجسس.",
+        about_value2: "التفرد والتميز: عنوان بريدك الإلكتروني المميز (@vipm.org) هو انعكاس لهويتك الرقمية الراقية.",
+        about_value3: "بنية تحتية موثوقة: نستخدم Google Workspace، أحد أكثر منصات البريد الإلكتروني موثوقية وأمانًا في العالم، لضمان استمرارية الخدمة وحماية البيانات.",
 
         // Contact Page
         contact_title: "اتصل بنا",
@@ -225,14 +229,14 @@ const translations = {
 
         // Privacy Page
         privacy_title: "سياسة الخصوصية",
-        privacy_tagline: "الخصوصية المطلقة هي مبدأنا الأساسي.",
-        privacy_intro: "VIP Mail لا يقوم بقراءة، تخزين، مشاركة، أو بيع محتوى رسائلك أو بيانات استخدامك لأي غرض كان. التزامنا بحماية بياناتك غير قابل للتفاوض.",
-        privacy_encryption_title: "حماية البيانات والتشفير",
-        privacy_encryption_desc: "يتم تشفير جميع رسائلك ومرفقاتك باستخدام تشفير من الطراز العسكري، مما يضمن عدم تمكن أي طرف، بما في ذلك نحن، من الوصول إلى محتواها.",
+        privacy_tagline: "أمانك وحماية بياناتك على رأس أولوياتنا.",
+        privacy_intro: "تلتزم VIP Mail بحماية بياناتك بأعلى معايير الأمان. نستخدم البنية التحتية لـ Google Workspace لتقديم خدمة بريد إلكتروني موثوقة وآمنة، مع ضمان حماية معلوماتك من خلال التشفير المتقدم.",
+        privacy_encryption_title: "التشفير والأمان المتقدم",
+        privacy_encryption_desc: "يتم حماية جميع رسائلك ومرفقاتك باستخدام تشفير من الدرجة العسكرية (TLS/SSL) أثناء النقل والتخزين. نستخدم البنية الأمنية المتقدمة لـ Google Workspace، والتي تتضمن حماية متعددة الطبقات، والكشف عن التهديدات، والمراقبة المستمرة لضمان سلامة بياناتك.",
         privacy_data_title: "البيانات التي نجمعها",
         privacy_data_desc: "نحن نجمع فقط البيانات الضرورية لتشغيل حسابك وتقديم الخدمة: عنوان البريد الإلكتروني الذي اخترته، ومعلومات الدفع (تتم معالجتها من قبل طرف ثالث موثوق ولا نخزن أرقام البطاقات)، وسجلات الدخول الأساسية لأغراض أمنية بحتة.",
-        privacy_sharing_title: "عدم مشاركة البيانات",
-        privacy_sharing_desc: "**لن نقوم بمشاركة بياناتك أو محتوى رسائلك مع أي طرف ثالث تحت أي ظرف من الظروف،** إلا إذا كان ذلك مطلوبًا بموجب أمر قضائي صريح وملزم قانونياً، وفي هذه الحالة، سنقوم بإشعار المستخدم قبل الامتثال قدر الإمكان.",
+        privacy_sharing_title: "البنية التحتية للخدمة وحماية البيانات",
+        privacy_sharing_desc: "تستخدم VIP Mail خدمة Google Workspace كبنية تحتية للبريد الإلكتروني. تلتزم Google Workspace بأعلى المعايير الدولية للأمان ولوائح حماية البيانات (بما في ذلك GDPR). يتم تخزين بياناتك بشكل آمن على خوادم Google مع ضوابط صارمة للوصول. نحن لا نصل أو نقرأ محتوى رسائلك، ونلتزم بحماية خصوصيتك وفقًا لسياسات خصوصية Google Workspace.",
 
         // Terms Page
         terms_title: "شروط الاستخدام",
