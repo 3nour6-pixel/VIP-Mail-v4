@@ -110,7 +110,7 @@
     </section>
 
     <!-- Features Section -->
-    <!-- Features Section - استبدل القسم القديم بهذا -->
+<!-- Features Section - استبدل القسم القديم بهذا -->
 <section id="features" class="features">
     <div class="container">
         <div class="section-header">
@@ -122,7 +122,7 @@
             </p>
         </div>
 
-        <div class="features-grid">
+        <div class="features-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
             <div class="feature-card">
                 <div class="feature-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -166,9 +166,12 @@
             <div class="feature-card">
                 <div class="feature-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 20h9"/>
-                        <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>
-                        <path d="m15 5 3 3"/>
+                        <path d="M12 6V2H8"/>
+                        <path d="m8 18-4 4V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2Z"/>
+                        <path d="M2 12h2"/>
+                        <path d="M9 11v2"/>
+                        <path d="M15 11v2"/>
+                        <path d="M20 12h2"/>
                     </svg>
                 </div>
                 <h3 class="feature-title" data-i18n="feature4_title">24/7 Technical Support</h3>
@@ -187,9 +190,23 @@
                 <h3 class="feature-title" data-i18n="feature5_title">Professional Email Management</h3>
                 <p class="feature-description" data-i18n="feature5_desc">Advanced tools for organizing and managing your emails with smart filters and automatic classification.</p>
             </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/>
+                        <path d="M2 12h20"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title" data-i18n="feature6_title">Global Access</h3>
+                <p class="feature-description" data-i18n="feature6_desc">Access your email from anywhere in the world on any device with complete security and protection.</p>
+            </div>
         </div>
     </div>
 </section>
+
+    
     <!-- Pricing Section -->
     <section id="pricing" class="pricing">
         <div class="container">
