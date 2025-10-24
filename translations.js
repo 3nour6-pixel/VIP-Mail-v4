@@ -103,7 +103,7 @@ const translations = {
         // Refund Page
         refund_title: "Refund Policy",
         refund_nonrefundable_title: "Activation Fee is Non-Refundable",
-        refund_nonrefundable_desc: "VIP Mail is an instant digital service, and its value depends on instant activation and exclusive reservation of your email address. The $1 USD activation fee is non-refundable.",
+        refund_nonrefundable_desc: "VIP Mail is a digital service, and its value depends on the activation and exclusive reservation of your email address. The activation fee is non-refundable.",
         refund_exception_title: "The Only Refund Exception",
         refund_exception_desc: "A refund request can be considered only if the service completely fails to work due to technical reasons attributable to VIP Mail within the first 72 hours of activation and we are unable to fix it.",
         refund_cases_title: "Non-Refundable Cases",
@@ -254,7 +254,7 @@ const translations = {
         // Refund Page
         refund_title: "سياسة الاسترجاع",
         refund_nonrefundable_title: "رسوم التفعيل غير قابلة للاسترداد",
-        refund_nonrefundable_desc: "تُعد خدمة VIP Mail **خدمة رقمية فورية**، وتعتمد قيمتها على التفعيل الفوري والحجز الحصري لعنوان البريد الإلكتروني الخاص بك. **رسوم تفعيل الخدمة البالغة 1 دولار أمريكي هي رسوم غير قابلة للاسترداد (Non-Refundable).**",
+        refund_nonrefundable_desc: "تعد خدمة VIP Mail خدمة رقمية، وتعتمد قيمتها على التفعيل والحجز الحصري لعنوان البريد الإلكتروني الخاص بك. رسوم تفعيل الخدمة هي رسوم غير قابلة للاسترداد (Non-Refundable).*",
         refund_exception_title: "الاستثناء الوحيد للاسترجاع",
         refund_exception_desc: "يمكن النظر في طلب استرداد المبلغ المدفوع **فقط** في حال **فشل الخدمة بشكل كامل** في العمل لأسباب تقنية تعود لـ VIP Mail خلال الـ **72 ساعة الأولى** من التفعيل ولم نتمكن من إصلاحها.",
         refund_cases_title: "حالات عدم الاسترجاع",
