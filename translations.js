@@ -49,7 +49,7 @@ const translations = {
         pricing_feature4: "technical support",
         pricing_feature5: "Join the digital elite at an unbeatable price",
         pricing_btn: "Book Now for Just $1!",
-        pricing_footer: "Join thousands of users who chose digital distinction",
+        pricing_footer: "Join users who chose digital distinction",
 
         // Footer
         footer_tagline: "Secure and premium email for the digital elite",
@@ -188,20 +188,20 @@ const translations = {
         // Pricing Section
         pricing_title: "اختر باقتك المثالية",
         pricing_description: "أسعار شفافة وباقات مرنة تناسب احتياجاتك",
-        pricing_badge: "🔥 عرض خاص",
+        pricing_badge: "عرض خاص",
         pricing_plan_title: "VIP Mail",
         pricing_period: "/لمرة واحدة",
         pricing_highlight: "بريدك الإلكتروني دائم طوال فترة اشتراك الدومين!",
-        pricing_deal1: "💸 دولار واحد فقط!",
-        pricing_deal2: "⏰ عرض محدود",
-        pricing_deal3: "🚀 تفعيل فوري",
-        pricing_feature1: "✨ بريد إلكتروني مخصص @vipm.org",
-        pricing_feature2: "🎯 صالح مدى الحياة (طوال فترة اشتراك الدومين)",
-        pricing_feature3: "🔒 حماية وتشفير كامل",
-        pricing_feature4: "📧 دعم فني متواصل",
-        pricing_feature5: "💎 انضم للنخبة الرقمية بسعر لا يُقاوم",
-        pricing_btn: "🎉 احجز الآن بدولار واحد فقط!",
-        pricing_footer: "⚡ انضم لآلاف المستخدمين الذين اختاروا التميز الرقمي",
+        pricing_deal1: "دولار واحد فقط!",
+        pricing_deal2: "عرض محدود",
+        pricing_deal3: "تفعيل فوري",
+        pricing_feature1: "بريد إلكتروني مخصص @vipm.org",
+        pricing_feature2: "صالح مدى الحياة (طوال فترة اشتراك الدومين)",
+        pricing_feature3: "حماية وتشفير كامل",
+        pricing_feature4: "دعم فني متواصل",
+        pricing_feature5: "انضم للنخبة الرقمية بسعر لا يُقاوم",
+        pricing_btn: "احجز الآن بدولار واحد فقط!",
+        pricing_footer: "انضم للمستخدمين الذين اختاروا التميز الرقمي",
 
         // Footer
         footer_tagline: "بريد إلكتروني آمن ومميز للنخبة الرقمية",
